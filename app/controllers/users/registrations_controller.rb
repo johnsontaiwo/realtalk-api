@@ -10,16 +10,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
     render json @user
   end
 
-
-  # POST /resource
-  def create
-    @user = User.new(user_params)
-    if @user.save
-      render json: @user
-    else
-      render json: { error: 'signup error' }, status: :unprocessable_entity
-    end
+def index
+    @user = User.new
+    render json @user
   end
+  # POST /resource
+  # def create
+  #   @user = User.create(user_params)
+  #   if @user.save
+  #     render json: @user
+  #   else
+  #     render json: { error: 'signup error' }, status: :unprocessable_entity
+  #   end
+  # end
 
   # GET /resource/edit
   # def edit
@@ -50,7 +53,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def user_params
-     params.require(:user).permit(:email, :password, :password_confirmation)
+     params.require(:user).permit(:email, :password)
   end
 
   # GET /resource/cancel
