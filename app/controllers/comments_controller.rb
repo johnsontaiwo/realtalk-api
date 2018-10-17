@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
  before_action :find_article
+  
   def index
     @articles = Article.all
     if params[:article_id]
@@ -24,6 +25,7 @@ class CommentsController < ApplicationController
       else
         render :json=> @article.errors, :status=>422
       end
+    end
  end
   
 def show
@@ -41,7 +43,7 @@ def show
   private
   
   def find_article
-    @article = Article.find_by(:id => params[:project_id])
+    @article = Article.find_by(:id => params[:article_id])
   end
   
   
