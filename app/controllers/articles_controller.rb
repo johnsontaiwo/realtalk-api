@@ -1,13 +1,23 @@
 class ArticlesController < ApplicationController
+  
   def new
     @article = Article.new
     render json: @article
   end
 
   def index
-    @articles = Article.find_by(id: params[:id])
+    @articles = Article.all
     render json: @articles
   end
+
+def create
+    @article = Article.create(article_params)
+    if @article.save
+      render json: @article
+      else
+      render json: @article.errors, status: :unprocessable_entity
+    end
+end
 
   def show
     @article = Article.find_by(id: params[:id])
@@ -33,7 +43,9 @@ class ArticlesController < ApplicationController
   end
  
  private
+
   def article_params
     params.require(:article).permit(:title, :content, :author_name)
   end
+
 end
