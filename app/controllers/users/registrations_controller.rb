@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
-  # before_action :configure_sign_up_params, only: [:create]
+   before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
@@ -15,14 +15,14 @@ def index
     render json @user
   end
   # POST /resource
-  # def create
-  #   @user = User.create(user_params)
-  #   if @user.save
-  #     render json: @user
-  #   else
-  #     render json: { error: 'signup error' }, status: :unprocessable_entity
-  #   end
-  # end
+  def create
+    @user = User.create(user_params)
+    if @user.save
+      render json: @user
+    else
+      render json: { error: 'signup error' }, status: :unprocessable_entity
+    end
+  end
 
   # GET /resource/edit
   # def edit
@@ -53,7 +53,7 @@ def index
   private
 
   def user_params
-     params.require(:user).permit(:email, :password)
+     params.require(:user).permit(:email, :password, :name)
   end
 
   # GET /resource/cancel
@@ -65,12 +65,12 @@ def index
   #   super
   # end
 
-  # protected
+   protected
 
   # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_up_params
-  #   devise_parameter_sanitizer.permit(:sign_up, keys: [:attribute])
-  # end
+  def configure_sign_up_params
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_account_update_params
