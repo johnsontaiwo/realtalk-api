@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  
+  before_action :find_user
   def new
     @article = Article.new
     render json: @article
@@ -11,12 +11,14 @@ class ArticlesController < ApplicationController
   end
 
 def create
-    @article = Article.create(article_params)
+  if params[:user_id]
+    @article = @user.articles.create(article_params)
     if @article.save
       render json: @article
       else
       render json: @article.errors, status: :unprocessable_entity
     end
+  end
 end
 
   def show
@@ -43,6 +45,11 @@ end
   end
  
  private
+ private
+  
+  def find_user
+    @user = User.find_by(:id => params[:user_id])
+  end
 
   def article_params
     params.require(:article).permit(:title, :content, :author_name)
