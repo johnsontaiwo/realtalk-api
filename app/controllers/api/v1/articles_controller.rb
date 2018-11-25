@@ -1,7 +1,8 @@
-
+ 
 class Api::V1::ArticlesController < ApplicationController
 
   before_action :find_user
+  
   def new
     @article = Article.new
     render json: @article
@@ -9,19 +10,23 @@ class Api::V1::ArticlesController < ApplicationController
 
   def index
     @articles = Article.all
+    if @user
+    render json: @user.articles
+    else
     render json: @articles
+    end
   end
 
 def create
-  if params[:user_id]
     @article = @user.articles.create(article_params)
+    #@article = Article.create(article_params)
     if @article.save
       render json: @article
       else
       render json: @article.errors, status: :unprocessable_entity
     end
-  end
-end
+   end
+#end
 
   def show
     @article = Article.find_by(id: params[:id])

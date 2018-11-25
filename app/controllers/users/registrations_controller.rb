@@ -2,6 +2,7 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
    before_action :configure_sign_up_params, only: [:create]
+   respond_to :json
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
@@ -9,20 +10,23 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @user = User.new
     render json @user
   end
-
 def index
     @user = User.new
     render json @user
   end
   # POST /resource
   def create
+    # build_resource(user_params)
+
+    # resource.save
+    # render_resource(resource)
     @user = User.create(user_params)
     if @user.save
       render json: @user
     else
       render json: { error: 'signup error' }, status: :unprocessable_entity
     end
-  end
+   end
 
   # GET /resource/edit
   # def edit

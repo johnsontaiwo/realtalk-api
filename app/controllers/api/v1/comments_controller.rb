@@ -1,6 +1,6 @@
-module api::V1
 
-class CommentsController < ApplicationController
+class Api::V1::CommentsController < ApplicationController
+
  before_action :find_article
   
   def index
@@ -53,4 +53,3 @@ def show
     params.require(:comment).permit(:content)
   end
  end
-end

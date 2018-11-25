@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181018174701) do
+ActiveRecord::Schema.define(version: 20181123185405) do
 
   create_table "articles", force: :cascade do |t|
     t.string   "title"
@@ -25,6 +25,11 @@ ActiveRecord::Schema.define(version: 20181018174701) do
     t.integer  "user_id"
     t.integer  "article_id"
     t.string   "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "jwt_blacklists", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

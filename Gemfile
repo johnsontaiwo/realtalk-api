@@ -19,15 +19,19 @@ gem 'puma', '~> 3.0'
 # Use ActiveModel has_secure_password
  gem 'bcrypt', '~> 3.1.7'
  gem 'devise'
+ gem 'knock'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
+gem 'dotenv-rails', groups: [:development, :test]
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
  gem 'rack-cors'
  gem 'active_model_serializers'
+ gem 'jwt'
+ #gem 'devise-jwt', '~> 0.5.8'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'pry'
 end
 
 group :development do
