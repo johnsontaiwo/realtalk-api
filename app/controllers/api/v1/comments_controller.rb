@@ -1,4 +1,4 @@
-
+require 'pry'
 class Api::V1::CommentsController < ApplicationController
 
  before_action :find_article
@@ -20,12 +20,14 @@ class Api::V1::CommentsController < ApplicationController
   end
  
  def create
+
   if params[:article_id]
       @comment = @article.comments.create(comment_params)
+      #binding.pry
       if @comment.save
         render json: @comment
       else
-        render :json=> @article.errors, :status=>422
+        render :json=> @article.errors
       end
     end
  end

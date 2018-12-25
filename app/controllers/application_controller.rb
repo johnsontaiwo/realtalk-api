@@ -1,13 +1,23 @@
 class ApplicationController < ActionController::API
-  # before_action :configure_permitted_parameters, if: :devise_controller?
-
-  # protected
-
-  # def configure_permitted_parameters
-  #   devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
-  # end
   
-  include Knock::Authenticable
-  #undef_method :current_user
+ def auth_header
+    request.headers['HTTP_AUTHORIZATION']
+ end
+  
 
+  def get_current_user
+    jwt_token = request.headers['HTTP_AUTHORIZATION'] # .gsub('Bearer ', '')
+
+    if jwt_token
+      user_info = Auth.decode(jwt_token)
+      user ||= User.find(user_info['user_id'])
+    end
+    
+    user
+  end
 end
+
+  
+  
+  
+

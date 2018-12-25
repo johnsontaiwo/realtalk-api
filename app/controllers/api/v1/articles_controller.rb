@@ -1,7 +1,7 @@
  
 class Api::V1::ArticlesController < ApplicationController
 
-  before_action :find_user
+  before_action :find_user, except: [:show]
   
   def new
     @article = Article.new
@@ -10,23 +10,35 @@ class Api::V1::ArticlesController < ApplicationController
 
   def index
     @articles = Article.all
-    if @user
-    render json: @user.articles
-    else
+    #binding.pry
     render json: @articles
-    end
   end
+    
+    
+     
+     
 
 def create
-    @article = @user.articles.create(article_params)
-    #@article = Article.create(article_params)
-    if @article.save
-      render json: @article
-      else
-      render json: @article.errors, status: :unprocessable_entity
-    end
-   end
-#end
+  # if params[:user_id]
+  #   @article = @user.articles.create(article_params)
+  #   #@article = Article.create(article_params)
+  #   if @article.save
+  #     render json: @article
+  #     else
+  #     render json: @article.errors, status: :unprocessable_entity
+  #   end
+  #  end
+  #if @user
+  article = get_current_user.articles.build(article_params)
+  #binding.pry
+  if article.save
+  render json: article
+  else
+  render :json=> { error: 'Signup or Login' }, :status=>422
+  end
+  #end
+
+end
 
   def show
     @article = Article.find_by(id: params[:id])
@@ -38,7 +50,7 @@ def create
     if @article.update_attributes(article_params)
       render json: @article
     else
-      render :json=> @article.errors, :status=>422
+      render :json=> @article.errors.message, :status=>422
     end
   end
 
@@ -55,11 +67,11 @@ def create
 
   
   def find_user
-    @user = User.find_by(:id => params[:user_id])
+    @user = User.find_by(id:  params[:user_id])
   end
 
   def article_params
-    params.require(:article).permit(:title, :content, :author_name)
+     params.require(:article).permit(:title, :content, :author_name)
   end
 
 end

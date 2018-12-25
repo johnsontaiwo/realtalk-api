@@ -8,16 +8,39 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    @user = User.find_by(id: params[:id])
-    render json: @user.articles
+    # @user = User.find_by(id: params[:id])
+    # render json: @user
+    ##render json: get_current_user
   end
 
-def create
-    @user = User.create(user_params)
-    if @user.save
-      render json: @user
+# def create
+#     @user = User.new(user_params)
+#     if @user.valid? && @user.save
+#       render json: @user
+#     else
+#       render json: { error: @user.errors }, status: :unprocessable_entity
+#     end
+#   end
+
+    def create
+      @user = User.create(user_params)
+
+      if @user.save
+        jwt = Auth.encrypt({ user_id: @user.id })
+        render json: { jwt: jwt, current: UserSerializer.new(@user) }
+      else
+        render json: { error: 'Failed to Sign Up' }, status: 400
+      end
+    end
+
+  def login
+    user = User.find_by(email: user_params[:email])
+
+    if user && user.authenticate(params[:user][:password])
+      jwt = Auth.encrypt({ user_id: user.id })
+      render json: { jwt: jwt, current: user }
     else
-      render json: { error: @user.errors }, status: :unprocessable_entity
+      render json: { error: 'Failed to Log In' }, status: 400
     end
   end
 
@@ -39,11 +62,21 @@ def create
     end
   end
 
+  def find_user_by_email
+    @user = User.find_by(email: params[:email])
+    if @user
+      render json: @user
+    else
+      @errors = @user.errors.full_messages
+      render json: @errors
+      end
+    end
+
   private
 
 
   def user_params
-    params.require(:user).permit(:email, :password, :name)
+    params.require(:user).permit(:name, :email, :password)
   end
 
 end
