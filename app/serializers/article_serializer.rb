@@ -1,5 +1,5 @@
 class ArticleSerializer < ActiveModel::Serializer
-  attributes :id, :title, :content, :author, :comment
+  attributes :id, :title, :content, :author_name, :author, :comment
 
   def author
     {author_id:
@@ -11,8 +11,9 @@ class ArticleSerializer < ActiveModel::Serializer
   def comment
     self.object.comments.map do |comment|
       {
-       content: comment.content
-       #commenter: comment.user.name
+       content: comment.content,
+       commentator: comment.commentator,
+       id: comment.id
       }
     end
   end

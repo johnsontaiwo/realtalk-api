@@ -4,11 +4,8 @@ class Api::V1::CommentsController < ApplicationController
  before_action :find_article
   
   def index
-    @articles = Article.all
-    if params[:article_id]
-        @comments = @article.comments.all
-        render json: @comments
-    end
+    @comments = @article.comments
+    render json: @comments
   end
 
   def new 
@@ -19,11 +16,9 @@ class Api::V1::CommentsController < ApplicationController
     end
   end
  
- def create
-
-  if params[:article_id]
+  def create
+    if params[:article_id]
       @comment = @article.comments.create(comment_params)
-      #binding.pry
       if @comment.save
         render json: @comment
       else
@@ -31,27 +26,33 @@ class Api::V1::CommentsController < ApplicationController
       end
     end
  end
-  
-def show
+
+  def show
     if params[:article_id]
       @comment = @article.comments.find_by(:id => params[:id])
+      render json: @comment
     end
   end
 
   def destroy
     @comment = @article.comments.find_by(:id => params[:id])
-    @comment.destroy
-    render :json=> { success: 'article was successfully deleted' }, :status=>201
+    if @comment.destroy
+      render json: @comment 
+    else
+    render :json=> { success: 'comment could not be deleted' }, :status=>201
+    end
   end
 
   private
-  
+
   def find_article
     @article = Article.find_by(:id => params[:article_id])
   end
-  
-  
+
+
   def comment_params
-    params.require(:comment).permit(:content)
+    params.require(:comment).permit(:content, :commentator)
   end
- end
+
+end
+  

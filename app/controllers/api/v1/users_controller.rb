@@ -1,7 +1,4 @@
-
-
 class Api::V1::UsersController < ApplicationController
- #before_action  :authenticate_user
   def index 
     @users = User.all
     render json: @users
@@ -13,48 +10,38 @@ class Api::V1::UsersController < ApplicationController
     ##render json: get_current_user
   end
 
-# def create
-#     @user = User.new(user_params)
-#     if @user.valid? && @user.save
-#       render json: @user
-#     else
-#       render json: { error: @user.errors }, status: :unprocessable_entity
-#     end
-#   end
-
-    def create
-      @user = User.create(user_params)
-
-      if @user.save
-        jwt = Auth.encrypt({ user_id: @user.id })
-        render json: { jwt: jwt, current: UserSerializer.new(@user) }
-      else
-        render json: { error: 'Failed to Sign Up' }, status: 400
-      end
+  def create
+    @user = User.create(user_params)
+    if @user.save
+      jwt = Auth.encrypt({ user_id: @user.id })
+      render json: { jwt: jwt, current: UserSerializer.new(@user) }
+    else
+      render json: { error: 'Failed to Sign Up' }, status: 400
     end
+  end
 
   def login
     user = User.find_by(email: user_params[:email])
-
-    if user && user.authenticate(params[:user][:password])
-      jwt = Auth.encrypt({ user_id: user.id })
-      render json: { jwt: jwt, current: user }
-    else
-      render json: { error: 'Failed to Log In' }, status: 400
-    end
+      if user && user.authenticate(params[:user][:password])
+        jwt = Auth.encrypt({ user_id: user.id })
+        render json: { jwt: jwt, current: user }
+      else
+        render json: { error: 'Failed to Log In' }, status: 400
+      end
   end
 
-   def update
+  def update
      @user = User.find_by(id: params[:id])
-    if @user.update_attributes(user_params)
-      render json: @user
-    else
-      render :json=> @user.errors, :status=>422
-    end
+      if @user.update_attributes(user_params)
+        render json: @user
+      else
+        render :json=> @user.errors, :status=>422
+      end
   end
+
 
   def destroy
-     @user = User.find_by(id: params[:id])
+   @user = User.find_by(id: params[:id])
     if @user.destroy
       render :json=> { success: 'user was successfully deleted' }, :status=>201
     else
@@ -62,21 +49,16 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def find_user_by_email
-    @user = User.find_by(email: params[:email])
-    if @user
-      render json: @user
-    else
-      @errors = @user.errors.full_messages
-      render json: @errors
-      end
-    end
 
   private
-
 
   def user_params
     params.require(:user).permit(:name, :email, :password)
   end
+   
+
 
 end
+
+
+
