@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.create(user_params)
     if @user.save
       jwt = Auth.encrypt({ user_id: @user.id })
-      render json: { jwt: jwt, current: UserSerializer.new(@user) }
+      render json: { jwt: jwt, current: UserSerializer.new(@user) }, notice: "Signed in as @user.name"
     else
       render json: { error: 'Failed to Sign Up' }, status: 400
     end
