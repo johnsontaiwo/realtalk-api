@@ -5,9 +5,9 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    # @user = User.find_by(id: params[:id])
-    # render json: @user
-    ##render json: get_current_user
+    @user = User.find_by(id: params[:id])
+    render json: @user
+    #render json: get_current_user
   end
 
   def create
@@ -53,7 +53,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password)
+    params.require(:user).permit(:name, :email, :age, :gender, :date_of_birth, :password)
   end
    
 

@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :name, :article
+  attributes :id, :email, :name, :age, :gender, :date_of_birth, :article
 
   def article
     self.object.articles.map do |article|
