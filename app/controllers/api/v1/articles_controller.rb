@@ -1,17 +1,17 @@
  
 class Api::V1::ArticlesController < ApplicationController
 
-    before_action :find_user, except: [:show, :destroy]
+  before_action :find_user, except: [:show, :destroy]
     
-    def new
-      @article = Article.new
-      render json: @article
-    end
+  def new
+    @article = Article.new
+    render json: @article
+  end
 
-    def index
-      @articles = Article.all
-      render json: @articles
-    end
+  def index
+    @articles = Article.all
+    render json: @articles
+  end
       
   def create
     article = get_current_user.articles.build(article_params)
@@ -54,7 +54,7 @@ class Api::V1::ArticlesController < ApplicationController
   
 
   def article_params
-     params.require(:article).permit(:title, :content, :author_name)
+     params.require(:article).permit(:title, :content, :author_name, :like)
   end
 
 end
