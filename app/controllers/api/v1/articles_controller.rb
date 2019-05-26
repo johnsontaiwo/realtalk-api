@@ -1,4 +1,4 @@
- 
+ require 'pry'
 class Api::V1::ArticlesController < ApplicationController
 
   before_action :find_user, except: [:show, :destroy]
@@ -35,6 +35,7 @@ class Api::V1::ArticlesController < ApplicationController
       render :json=> @article.errors.message, :status=>422
     end
   end
+      
 
   def destroy
     @article = Article.find_by(id: params[:id])
@@ -55,7 +56,7 @@ class Api::V1::ArticlesController < ApplicationController
 
 
   def article_params
-     params.require(:article).permit(:title, :content, :author_name, :like)
+     params.require(:article).permit(:title, :content, :author_name, :likes)
   end
 
 end
