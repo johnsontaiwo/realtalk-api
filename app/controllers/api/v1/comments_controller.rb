@@ -34,6 +34,15 @@ class Api::V1::CommentsController < ApplicationController
     end
   end
 
+  def update
+    @comment = @article.comments.find_by(:id => params[:id])
+    if @comment.update_attributes(comment_params)
+      render json: @comment 
+    else
+    render :json=> { success: 'comment could not be updated' }, :status=>201
+    end
+  end
+
   def destroy
     @comment = @article.comments.find_by(:id => params[:id])
     if @comment.destroy
@@ -51,7 +60,7 @@ class Api::V1::CommentsController < ApplicationController
 
 
   def comment_params
-    params.require(:comment).permit(:content, :commentator)
+    params.require(:comment).permit(:content, :commentator, :like)
   end
 
 end

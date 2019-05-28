@@ -13,7 +13,8 @@ class ArticleSerializer < ActiveModel::Serializer
       {
        content: comment.content,
        commentator: comment.commentator,
-       id: comment.id
+       id: comment.id,
+       like: comment.like
       }
     end
   end
